@@ -2,7 +2,10 @@
   "name": "troomba",
   "version": "0.0.1",
   "description": "Roomba in action simulator",
-  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/sengeezer/troomba"
+  },
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
