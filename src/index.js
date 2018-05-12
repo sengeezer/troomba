@@ -19,6 +19,8 @@ fs.readFile(input, 'utf8', (err, data) => {
 
   const dataSetLength = allData.length;
   const gridSize = allData[0];
-  const allMoves = allData[dataSetLength - 1];
+  const allMoves = [...allData[dataSetLength - 1]];
   const allStains = allData.slice(allData[1], allData[dataSetLength - 2]);
+
+  console.log(allMoves);
 });
