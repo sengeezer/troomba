@@ -16,6 +16,16 @@ function step(arr1, arr2) {
   return arr1.map((num, idx) => num + arr2[idx]);
 }
 
+function compareValues(arr1, arr2) {
+  for (let key in arr1) {
+    if (arr1.hasOwnProperty(key)) {
+      if (compare(arr1[key], arr2[key]) === false) {
+        return false;
+      }
+    }
+  }
+}
+
 function checkSkid(arr, max, min) {
   return arr.map((num) => {
     switch (num) {
