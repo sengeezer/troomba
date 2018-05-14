@@ -17,13 +17,7 @@ function step(arr1, arr2) {
 }
 
 function compareValues(arr1, arr2) {
-  for (let key in arr1) {
-    if (arr1.hasOwnProperty(key)) {
-      if (compare(arr1[key], arr2[key]) === false) {
-        return false;
-      }
-    }
-  }
+  return arr1.every((el, idx) => el === arr2[idx]);
 }
 
 function checkSkid(arr, max, min) {
@@ -54,5 +48,5 @@ fs.readFile(input, 'utf8', (err, data) => {
   console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
 
   // Type debugging
-  console.log(gridSize);
+  console.log(compareValues([1, 1], [1, 1]));
 });
