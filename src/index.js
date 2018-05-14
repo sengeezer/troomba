@@ -12,6 +12,8 @@ const directions = {
 
 const origin = [0, 0];
 let cursor = [];
+let stainCount = 0;
+let isStain = false;
 
 function step(arr1, arr2) {
   return arr1.map((num, idx) => num + arr2[idx]);
@@ -51,13 +53,23 @@ fs.readFile(input, 'utf8', (err, data) => {
   console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
   console.log(directions[allMoves[0]]);
 
-  // Make one move
+  // 1: Make one move
   cursor = step(origin, directions[allMoves[0]]);
   console.log(cursor);
 
-  // check for stain
+  // 2: check for stain
+  isStain = allStains.every(el => compareValues(el, cursor));
+  console.log('stain?:', isStain);
+  if (isStain) {
+    stainCount++;
+  }
 
-  // Check skid
+  // 3: Check skid
   cursor = checkSkid(cursor, gridSize[0], gridSize[1]);
   console.log(cursor);
+
+  // Repeat steps 1 - 3
+
+  // Print result
+  console.log('Number of stains removed:', stainCount);
 });
