@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 
@@ -61,7 +62,7 @@ fs.readFile(input, 'utf8', (err, data) => {
   isStain = allStains.every(el => compareValues(el, cursor));
   console.log('stain?:', isStain);
   if (isStain) {
-    stainCount++;
+    stainCount += 1;
   }
 
   // 3: Check skid
