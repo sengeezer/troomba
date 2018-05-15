@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console, no-restricted-syntax, no-plusplus, no-await-in-loop */
 const fs = require('fs');
 const path = require('path');
 
@@ -14,15 +14,19 @@ const directions = {
 const origin = [0, 0];
 let cursor = origin;
 let stainCount = 0;
-let isStain = false;
 
-function step(arr1, arr2) {
-  return arr1.map((num, idx) => num + arr2[idx]);
+async function step(arr1, arr2) {
+  const stepped = await arr1.map((num, idx) => num + arr2[idx]);
+  return stepped;
 }
 
-function compareValues(arr1, arr2) {
-  console.log(`comparing: ${arr1} and ${arr2}`);
-  return arr1.every((el, idx) => el === arr2[idx]);
+async function compareValues(arr1, arr2) {
+  const comp = await arr1.every((el, idx) => el === arr2[idx]);
+
+  if (comp) {
+    stainCount += 1;
+    console.log('Stain found!');
+  }
 }
 
 function checkSkid(arr, max, min) {
@@ -44,33 +48,41 @@ function operate(allData) {
   const allMoves = [...allData[dataSetLength - 1]];
   const allStains = allData.slice(1, dataSetLength - 1).map(coord => [...coord].filter(entry => entry !== ' ').map(num => Number(num)));
 
-  // debugging
-  // console.log(allData);
   console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
-  // console.log(directions[allMoves[0]]);
 
-  // TODO: async/await or Promise for every step
+  async function processMoves(element) {
+    console.log('Position:', cursor);
+    console.log('Going:', element);
+    const steppedCursor = await step(cursor, directions[element]);
+    const skiddedCursor = await checkSkid(steppedCursor, gridSize[0], gridSize[1]);
+    const itsStain = await allStains.forEach(elm => compareValues(elm, skiddedCursor));
 
-  allMoves.forEach((el) => {
-    // 1: Make one move
-    cursor = step(cursor, directions[el]);
-    console.log('Step 1:', cursor);
-
-    // 2: Check for stain
-    isStain = allStains.every(elm => compareValues(elm, cursor));
-    console.log('Step 2: stain ?:', isStain);
-
-    if (isStain) {
-      stainCount += 1;
+    // TODO: Find way of linting itsStain
+    if (itsStain) {
+      // console.log(itsStain);
     }
 
-    // 3: Check skid
-    cursor = checkSkid(cursor, gridSize[0], gridSize[1]);
-    console.log('Step 3:', cursor);
-  });
+    cursor = skiddedCursor;
+  }
 
-  // Print result
-  console.log('Number of stains removed:', stainCount);
+  // Async forEach
+  // Credit: Anton Lavrenov<https://gist.github.com/Atinux/fd2bcce63e44a7d3addddc166ce93fb2>
+  const asyncForEach = async (arr, cb) => {
+    for (let i = 0; i < arr.length; i++) {
+      await cb(arr[i], i, arr);
+    }
+  };
+
+  const start = async () => {
+    await asyncForEach(allMoves, async (element) => {
+      await processMoves(element);
+    });
+
+    console.log('Position:', cursor);
+    console.log('Number of stains eliminated:', stainCount);
+  };
+
+  start();
 }
 
 fs.readFile(input, 'utf8', (err, data) => {
