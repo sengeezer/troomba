@@ -12,7 +12,7 @@ const directions = {
 };
 
 const origin = [0, 0];
-let cursor = [];
+let cursor = origin;
 let stainCount = 0;
 let isStain = false;
 
@@ -21,6 +21,7 @@ function step(arr1, arr2) {
 }
 
 function compareValues(arr1, arr2) {
+  console.log(`comparing: ${arr1} and ${arr2}`);
   return arr1.every((el, idx) => el === arr2[idx]);
 }
 
@@ -44,26 +45,27 @@ function operate(allData) {
   const allStains = allData.slice(1, dataSetLength - 1).map(coord => [...coord].filter(entry => entry !== ' ').map(num => Number(num)));
 
   // debugging
-  console.log(allData);
+  // console.log(allData);
   console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
-  console.log(directions[allMoves[0]]);
+  // console.log(directions[allMoves[0]]);
 
-  // 1: Make one move
-  cursor = step(origin, directions[allMoves[0]]);
-  console.log(cursor);
+  allMoves.forEach((el) => {
+    // 1: Make one move
+    cursor = step(cursor, directions[el]);
+    console.log('Step 1:', cursor);
 
-  // 2: check for stain
-  isStain = allStains.every(el => compareValues(el, cursor));
-  console.log('stain?:', isStain);
-  if (isStain) {
-    stainCount += 1;
-  }
+    // 2: Check for stain
+    isStain = allStains.every(elm => compareValues(elm, cursor));
+    console.log('Step 2: stain ?:', isStain);
 
-  // 3: Check skid
-  cursor = checkSkid(cursor, gridSize[0], gridSize[1]);
-  console.log(cursor);
+    if (isStain) {
+      stainCount += 1;
+    }
 
-  // Repeat steps 1 - 3
+    // 3: Check skid
+    cursor = checkSkid(cursor, gridSize[0], gridSize[1]);
+    console.log('Step 3:', cursor);
+  });
 
   // Print result
   console.log('Number of stains removed:', stainCount);
