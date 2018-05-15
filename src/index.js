@@ -37,17 +37,11 @@ function checkSkid(arr, max, min) {
   });
 }
 
-fs.readFile(input, 'utf8', (err, data) => {
-  if (err) {
-    throw err;
-  }
-  const allData = data.split('\n');
-
+function operate(allData) {
   const dataSetLength = allData.length;
   const gridSize = [...allData[0]].filter(entry => entry !== ' ').map(num => Number(num));
   const allMoves = [...allData[dataSetLength - 1]];
   const allStains = allData.slice(1, dataSetLength - 1).map(coord => [...coord].filter(entry => entry !== ' ').map(num => Number(num)));
-
 
   // debugging
   console.log(allData);
@@ -73,4 +67,12 @@ fs.readFile(input, 'utf8', (err, data) => {
 
   // Print result
   console.log('Number of stains removed:', stainCount);
+}
+
+fs.readFile(input, 'utf8', (err, data) => {
+  if (err) {
+    throw err;
+  }
+
+  operate(data.split('\n'));
 });
