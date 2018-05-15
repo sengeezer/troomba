@@ -49,6 +49,8 @@ function operate(allData) {
   console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
   // console.log(directions[allMoves[0]]);
 
+  // TODO: async/await or Promise for every step
+
   allMoves.forEach((el) => {
     // 1: Make one move
     cursor = step(cursor, directions[el]);
