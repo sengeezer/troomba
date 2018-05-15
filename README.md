@@ -9,3 +9,10 @@
 ## Development
 
 * To run the app in development mode (reload on save), run `npm run dev` instead of `npm run start`.
+
+## Next steps
+
+* Split code to make it more readable
+* Reduce reliance on asyc/await where possible
+* Increase resilience by checking validity / format of input
+* Add unit tests to test robustness of application logic
