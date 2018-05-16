@@ -16,3 +16,5 @@
 * Reduce reliance on asyc/await where possible
 * Increase resilience by checking validity / format of input
 * Add unit tests to test robustness of application logic
+* DRY code
+* Enable development code running (more console logs) from the command line (e.g. `npm run dev --log`)

@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const debug = false;
 const input = path.join(__dirname, 'input.txt');
 
 const directions = {
@@ -11,8 +12,6 @@ const directions = {
   W: [-1, 0],
 };
 
-const origin = [0, 0];
-let cursor = origin;
 let stainCount = 0;
 
 async function step(arr1, arr2) {
@@ -25,7 +24,9 @@ async function compareValues(arr1, arr2) {
 
   if (comp) {
     stainCount += 1;
-    console.log('Stain found!');
+    if (debug) {
+      console.log('Stain found!');
+    }
   }
 }
 
@@ -43,16 +44,25 @@ function checkSkid(arr, max, min) {
 }
 
 function operate(allData) {
+  // Extract and format data
   const dataSetLength = allData.length;
   const gridSize = [...allData[0]].filter(entry => entry !== ' ').map(num => Number(num));
+  const origin = [...allData[1]].filter(entry => entry !== ' ').map(num => Number(num));
   const allMoves = [...allData[dataSetLength - 1]];
-  const allStains = allData.slice(1, dataSetLength - 1).map(coord => [...coord].filter(entry => entry !== ' ').map(num => Number(num)));
+  const allStains = allData.slice(2, dataSetLength - 1).map(coord => [...coord].filter(entry => entry !== ' ').map(num => Number(num)));
 
-  console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
+  if (debug) {
+    console.log(`Grid size: ${gridSize}\nMoves: ${allMoves}\nStains: ${allStains}`);
+  }
+
+  let cursor = origin;
 
   async function processMoves(element) {
-    console.log('Position:', cursor);
-    console.log('Going:', element);
+    if (debug) {
+      console.log('Position:', cursor);
+      console.log('Going:', element);
+    }
+
     const steppedCursor = await step(cursor, directions[element]);
     const skiddedCursor = await checkSkid(steppedCursor, gridSize[0], gridSize[1]);
     const itsStain = await allStains.forEach(elm => compareValues(elm, skiddedCursor));
@@ -78,8 +88,13 @@ function operate(allData) {
       await processMoves(element);
     });
 
-    console.log('Position:', cursor);
-    console.log('Number of stains eliminated:', stainCount);
+    // deliver results
+    if (debug) {
+      console.log('Position:', cursor);
+      console.log('Number of stains eliminated:', stainCount);
+    } else {
+      console.log(`${cursor[0]} ${cursor[1]}\n${stainCount}`);
+    }
   };
 
   start();
