@@ -12,6 +12,7 @@
 
 ## Next steps
 
+* Keep record of stains found to avoid phantom cleans
 * Split code to make it more readable
 * Reduce reliance on asyc/await where possible
 * Increase resilience by checking validity / format of input
